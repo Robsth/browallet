@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from api.exceptions import InsufficientFunds
 from api.models import Transaction
+from api.permissions import CreateReadPermission
 from api.serializers import TransactionSerializer
 from api.services.transactions import create_transaction
 
@@ -12,6 +13,7 @@ from api.services.transactions import create_transaction
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+    permission_classes = [CreateReadPermission]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['wallet', 'txid']
     ordering_fields = ['amount']

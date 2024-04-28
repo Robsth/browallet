@@ -3,7 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from decimal import Decimal
 
-from api.models import Wallet
+from api.models import Wallet, Transaction
 from api.exceptions import InsufficientFunds
 from api.services.transactions import create_transaction
 
@@ -47,3 +47,20 @@ class TransactionServiceTests(TransactionBaseTestCase):
     def test_create_transaction_insufficient_funds(self):
         with self.assertRaises(InsufficientFunds):
             create_transaction(self.wallet.id, Decimal('-150.00'))
+
+
+class TransactionUpdateDeleteTests(TransactionBaseTestCase):
+    def test_update_transaction_not_allowed(self):
+        transaction = Transaction.objects.create(wallet=self.wallet, amount=Decimal('50.00'))
+        transaction_url = f'/api/transactions/{transaction.id}/'
+
+        update_response = self.client.patch(transaction_url, {'amount': '55.00'})
+        self.assertEqual(update_response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_delete_transaction_not_allowed(self):
+        transaction = Transaction.objects.create(wallet=self.wallet, amount=Decimal('50.00'))
+        transaction_url = f'/api/transactions/{transaction.id}/'
+
+        delete_response = self.client.delete(transaction_url)
+        self.assertEqual(delete_response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
