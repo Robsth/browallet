@@ -63,14 +63,3 @@ For administrative tasks, you can access the Django admin panel:
 
 - **Admin Panel**:
   - URL: [http://0.0.0.0:8000/admin](http://0.0.0.0:8000/admin)
-
-### How to Access the API
-
-You can interact with the API using any HTTP client. Below are examples using `curl`:
-
-```bash
-# Retrieve all wallets
-curl http://0.0.0.0:8000/api/wallets/?format=api
-
-# Retrieve all transactions
-curl http://0.0.0.0:8000/api/transactions/?format=api
